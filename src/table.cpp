@@ -1,4 +1,5 @@
-#include <fstream>
+#include <cstddef>
+#include <ostream>
 #include <vector>
 #include <iostream>
 
@@ -9,28 +10,33 @@ CItem::CItem(bool plugged)
 bool CItem::plugged() const {return plugged_;}
 
 
-CTable::CTable(std::string filename)
-: out_file(filename)
+CTable::CTable() {}
+void CTable::write_all(std::ostream& os)
 {
-    if (!out_file)
-    {
-        throw std::runtime_error("Could not open file: " + filename);
+    os << "Index,Plugged\n";
+    for (size_t i = 0; i < items_.size(); i++) {
+        os << i+1 << "," << items_.at(i).plugged() << "\n";
     }
-    file_init();
+    os << std::flush;
+
 }
-void CTable::file_init()
-{
-    out_file << "Index,Plugged\n";
-}
-void CTable::write_to_file(const CItem & item)
-{
-    out_file << items_.size() << "," << item.plugged() << std::endl;
-}
-void CTable::new_item()
+void CTable::new_item(size_t id)
 {
     bool plugged;
     std::cout << "Is the item plugged in?\n> ";
     std::cin >> plugged;
-    items_.push_back({plugged});
-    write_to_file(items_.back());
+    if (items_.size() == id) {
+        items_.push_back({plugged});
+    }
+    else {
+        items_.at(id) = {plugged};
+    }
 }
+void CTable::edit_item()
+{
+    size_t id = 0;
+    std::cout << "Enter item id\n> ";
+    std::cin >> id;
+    new_item(id-1);
+}
+int CTable::count() {return items_.size();}

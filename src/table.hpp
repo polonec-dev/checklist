@@ -1,5 +1,6 @@
-#include <fstream>
+#include <ostream>
 #include <vector>
+#include <iostream>
 
 class CItem
 {
@@ -13,11 +14,12 @@ class CItem
 class CTable
 {
     private:
-        std::ofstream out_file;
         std::vector<CItem> items_;
         void file_init();
-        void write_to_file(const CItem & item);
     public:
-        CTable(std::string filename);
-        void new_item();
+        void write_all(std::ostream& os);
+        CTable();
+        void new_item(size_t id);
+        void edit_item();
+        int count();
 };
