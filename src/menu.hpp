@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
 
-//needs enum probably
+enum menu_opt {M_NEW, M_EDIT, M_SHOW, M_END, M_INVALID};
+
 int run_menu();
