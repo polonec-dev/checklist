@@ -1,5 +1,6 @@
 #include <cstddef>
 #include <ostream>
+#include <stdexcept>
 #include <vector>
 #include <iostream>
 
@@ -20,23 +21,16 @@ void CTable::write_all(std::ostream& os)
     os << std::flush;
 
 }
-void CTable::new_item(size_t id)
+void CTable::new_item(bool plugged)
 {
-    bool plugged;
-    std::cout << "Is the item plugged in?\n> ";
-    std::cin >> plugged;
-    if (items_.size() == id) {
-        items_.push_back({plugged});
-    }
-    else {
-        items_.at(id) = {plugged};
-    }
+    items_.push_back({plugged});
 }
-void CTable::edit_item()
+void CTable::edit_item(size_t id, bool plugged)
 {
-    size_t id = 0;
-    std::cout << "Enter item id\n> ";
-    std::cin >> id;
-    new_item(id-1);
+    if (id > items_.size()) {
+        throw std::out_of_range("Item index out of range");
+    }
+    items_.at(id) = {plugged};
 }
-int CTable::count() {return items_.size();}
+int CTable::count() const {return items_.size();}
+bool CTable::is_plugged(size_t id) const {return items_.at(id).plugged();}

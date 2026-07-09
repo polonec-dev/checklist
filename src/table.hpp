@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <ostream>
 #include <vector>
 #include <iostream>
@@ -19,7 +20,8 @@ class CTable
     public:
         void write_all(std::ostream& os);
         CTable();
-        void new_item(size_t id);
-        void edit_item();
-        int count();
+        void new_item(bool plugged);
+        void edit_item(size_t id, bool plugged);
+        int count() const;
+        bool is_plugged(size_t id) const;
 };
